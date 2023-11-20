@@ -15,7 +15,8 @@ pipeline {
         //   sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
         // }
         withSonarQubeEnv(installationName: 'sq1') { 
-          sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+          // sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+          sh 'sonar-scanner'
         }
         // sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
       }
