@@ -1,0 +1,18 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm: [$class: 'GitSCM', branches: [[name: '*/sonar']], userRemoteConfigs: [[url: 'https://github.com/ruihuan3/java-web-app.git']]]
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv(installationName: 'sq1') {
+                    // Now you can run SonarQube Scanner without specifying the full path
+                    sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.projectKey=new_project_2 -Dsonar.login=admin -Dsonar.password=admin'
+                }
+            }
+        }
+    }
+}
