@@ -11,21 +11,29 @@ pipeline {
             checkout scm: [$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/DingCH01/cloudinfra-teamproject-test']]]
         }
     }
-    stage('Scan') {
-      steps {
-        // withSonarQubeEnv(installationName: 'sq2') { 
-        //   sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
-        // }
-        // withSonarQubeEnv { 
-        //   sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
-        // }
-        withSonarQubeEnv(installationName: 'sq1') { 
-          // sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
-          // sh 'sonar-scanner'
-          sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.projectKey=project -Dsonar.login=admin -Dsonar.password=admin'
+    // stage('Scan') {
+    //   steps {
+    //     // withSonarQubeEnv(installationName: 'sq2') { 
+    //     //   sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
+    //     // }
+    //     // withSonarQubeEnv { 
+    //     //   sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+    //     // }
+    //     withSonarQubeEnv(installationName: 'sq1') { 
+    //       // sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+    //       // sh 'sonar-scanner'
+    //       sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.projectKey=project -Dsonar.login=admin -Dsonar.password=admin'
+    //     }
+    //     // sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+    //   }
+    // }
+    stage('SonarQube Analysis') {
+        steps {
+            withSonarQubeEnv(installationName: 'sq1') {
+                // Now you can run SonarQube Scanner without specifying the full path
+                sh '/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=project -Dsonar.login=admin -Dsonar.password=admin'
+            }
         }
-        // sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
-      }
     }
     stage("Quality Gate") {
       steps {
